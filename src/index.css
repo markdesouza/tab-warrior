@@ -15,13 +15,24 @@ html, body {
 @tailwind components;
 @tailwind utilities;
 
+
+.tabTableFilter {
+  @apply px-2;
+  @apply border;
+  @apply float-right;
+  @apply text-base;
+  @apply -mt-7;
+  @apply w-1/6;
+}
+
+.tabTableFilter:focus {
+  outline: none;
+}
+
 .tabTable {
-  /* @apply container mx-auto;
-  @apply px-4;
-  @apply w-full; */
   @apply w-full;
   @apply table-fixed;
-  @apply mt-10;
+  @apply mt-8;
   @apply border;
 }
 

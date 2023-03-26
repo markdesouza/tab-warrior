@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-function TabTable() {
+
+interface TabTableProps {
+    filter: String
+}
+
+function TabTable(props: TabTableProps) {
     const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
 
     useEffect(() => {
@@ -17,7 +22,11 @@ function TabTable() {
         <th scope="col">{header}</th>
     );
 
-    const dataRows = tabs.map((tab) =>
+    const search = props.filter.toLowerCase();
+    const dataRows = tabs.filter(
+        tab => ((search === "") || 
+                (tab.title?.toLowerCase().indexOf(search) != -1) || 
+                (tab.url?.toLowerCase().indexOf(search) != -1))).map((tab) => 
         <TabRow tab={tab} key={tab.id} />
     );
 
