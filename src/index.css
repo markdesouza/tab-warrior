@@ -7,7 +7,43 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html, body {
+  width: 100%;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tabTable {
+  /* @apply container mx-auto;
+  @apply px-4;
+  @apply w-full; */
+  @apply w-full;
+  @apply table-fixed;
+  @apply mt-10;
+  @apply border;
+}
+
+.tabTable tr:first-child {
+  @apply border;
+}
+
+.tabTable th {
+  @apply text-base;
+  @apply px-6;
+  @apply py-1;
+}
+
+.tabTable tr:hover:not(:first-child) {
+  @apply bg-stone-100;
+}
+
+.tabTable td {
+  @apply text-left;
+  @apply text-ellipsis;
+  @apply overflow-hidden;
+  @apply whitespace-nowrap;
+  @apply px-4;
+  @apply py-1;
 }
