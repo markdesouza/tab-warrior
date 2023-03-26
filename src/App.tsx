@@ -5,6 +5,7 @@ import './App.css';
 
 function App() {
   const [filter, setFilter] = useState<string>("");
+  const [tabCount, setTabCount] = useState<number>(0);
 
   function onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFilter(e.target.value);
@@ -12,11 +13,14 @@ function App() {
 
   return (
     <div className="p-8 overflow-auto relative">
-      <h1 className="text-3xl text-center font-bold underline">
-        Tab Cleanup
-      </h1>
+      <div className="container flex w-fit mx-auto">
+        <h1 className="text-3xl font-bold underline float-left">
+          Tab Cleanup
+        </h1>
+        <span className="float-right mt-auto ml-4 text-sm">{"("+tabCount+" tabs)"}</span>
+      </div>
       <TabTableFilter filter={filter} onChange={onFilterChange} />
-      <TabTable filter={filter} />
+      <TabTable filter={filter} onCount={setTabCount} />
     </div>
   );
 }

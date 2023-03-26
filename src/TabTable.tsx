@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 interface TabTableProps {
     filter: String
+    onCount: Function
 }
 
 function TabTable(props: TabTableProps) {
@@ -16,7 +17,7 @@ function TabTable(props: TabTableProps) {
         let queryOptions = {};
         chrome.tabs.query(queryOptions, tabs => {
             setTabs(tabs);
-            console.log(tabs);
+            props.onCount(tabs.length);
         });
     }, []);
 
