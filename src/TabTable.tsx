@@ -1,6 +1,6 @@
 import { faEye, faSort, faSortAsc, faSortDesc, faTrashCan, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 
 interface TabTableProps {
@@ -81,13 +81,16 @@ function TabTable(props: TabTableProps) {
     }
 
     const search = props.filter.toLowerCase();
-    const dataRows = tabs.filter(
+    var dataRows = tabs.filter(
         tab => ((search === "") ||
             (tab.title?.toLowerCase().indexOf(search) !== -1) ||
             (tab.url?.toLowerCase().indexOf(search) !== -1))).sort(compareTabs).map((tab) =>
                 <TabRow tab={tab} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} key={tab.id} />
             );
-    tabs.sort()
+    if (dataRows.length === 0) {
+        dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);
+    }
+
     return (
         <div className="tabTable">
             <div className="tabTableRow">
