@@ -31,30 +31,65 @@ html, body {
 
 .tabTable {
   @apply w-full;
-  @apply table-fixed;
   @apply mt-8;
   @apply border;
 }
 
-.tabTable tr:first-child {
-  @apply border;
+.tabTableRow {
+  @apply border-b;
 }
 
-.tabTable th {
-  @apply text-base;
-  @apply px-6;
-  @apply py-1;
+.inactiveSort {
+  @apply text-slate-400;
 }
 
-.tabTable tr:hover:not(:first-child) {
+.tabTable > .tabTableRow:hover:not(:first-child) {
   @apply bg-stone-100;
 }
 
-.tabTable td {
+.tabTableRow > div {
   @apply text-left;
   @apply text-ellipsis;
   @apply overflow-hidden;
   @apply whitespace-nowrap;
   @apply px-4;
   @apply py-1;
+  @apply inline-block;
+}
+
+.tabTableHeader {
+  @apply text-sm;
+  @apply font-bold;
+  @apply cursor-pointer;
+}
+
+.tabTableHeader > svg {
+  @apply ml-1;
+}
+
+.tabTableHeader > svg:hover {
+  @apply text-black;
+}
+
+.tabTableRow > div:nth-child(1), .tabTableRow > div:nth-child(2) {
+  width: 2%;
+  @apply px-0;
+  @apply text-center;
+}
+
+.tabActionIcon {
+  @apply text-slate-500;
+  @apply cursor-pointer;
+}
+
+.tabActionIcon:hover {
+  @apply text-black;
+}
+
+.tabTableRow > div:nth-child(3), .tabTableRow > div:nth-child(4) {
+  width: 48%;
+}
+
+.tabTableRow:hover > div:nth-child(3), .tabTableRow:hover > div:nth-child(4) {
+  @apply font-bold;
 }
