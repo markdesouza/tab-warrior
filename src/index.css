@@ -81,7 +81,7 @@ html, body {
   @apply text-black;
 }
 
-.tabTableRow > div:nth-child(1), .tabTableRow > div:nth-child(2) {
+.tabTableRow > div:nth-child(1), .tabTableRow > div:nth-child(2), .tabTableRow > div:nth-child(3) {
   width: 2%;
   @apply px-0;
   @apply text-center;
@@ -96,10 +96,14 @@ html, body {
   @apply text-black;
 }
 
-.tabTableRow > div:nth-child(3), .tabTableRow > div:nth-child(4) {
-  width: 48%;
+.tabDisabledActionIcon {
+  @apply text-slate-300;
 }
 
-.tabTableRow:hover > div:nth-child(3), .tabTableRow:hover > div:nth-child(4) {
+.tabTableRow > div:nth-child(4), .tabTableRow > div:nth-child(5) {
+  width: 47%;
+}
+
+.tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5) {
   @apply font-bold;
 }

@@ -1,4 +1,4 @@
-import { faEye, faSort, faSortAsc, faSortDesc, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faSort, faSortAsc, faSortDesc, faTrashCan, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 
@@ -25,9 +25,9 @@ function TabTable(props: TabTableProps) {
         });
     }
 
-    const headers = ["", "", "Title", "URL"];
+    const headers = ["", "", "", "Title", "URL"];
     const headersColumns = headers.map((header) => {
-        if (header == "") {
+        if (header === "") {
             return (<div>&nbsp;</div>);
         }
 
@@ -56,11 +56,11 @@ function TabTable(props: TabTableProps) {
     );
 
     const compareTabs = (a: chrome.tabs.Tab, b: chrome.tabs.Tab) => {
-        if (sortIndex == "") {
+        if (sortIndex === "") {
             return 0;
         }
         var aVal, bVal;
-        if (sortIndex == "Title") {
+        if (sortIndex === "Title") {
             aVal = a.title?.toLowerCase() ?? "";
             bVal = b.title?.toLowerCase() ?? "";
         } else {
@@ -76,12 +76,16 @@ function TabTable(props: TabTableProps) {
         }
     }
 
+    const unmarkTabAudio = (tabId: number) => {
+        setTabs(tabs.map(tab => {if (tab.id === tabId) {tab.audible = false;} return tab;}));
+    }
+
     const search = props.filter.toLowerCase();
     const dataRows = tabs.filter(
         tab => ((search === "") ||
             (tab.title?.toLowerCase().indexOf(search) !== -1) ||
             (tab.url?.toLowerCase().indexOf(search) !== -1))).sort(compareTabs).map((tab) =>
-                <TabRow tab={tab} updateTabList={updateTabList} key={tab.id} />
+                <TabRow tab={tab} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} key={tab.id} />
             );
     tabs.sort()
     return (
@@ -98,6 +102,7 @@ function TabTable(props: TabTableProps) {
 interface TabRowProps {
     tab: chrome.tabs.Tab
     updateTabList: Function
+    unmarkTabAudio: Function
 }
 
 function TabRow(props: TabRowProps) {
@@ -120,10 +125,33 @@ function TabRow(props: TabRowProps) {
         }
     }
 
+    var audioCssClass = props.tab.audible ? "tabActionIcon" : "tabDisabledActionIcon";
+    var audioTitle = props.tab.audible ? "Tab is playing audio" : "Tab is not playing audio";
+    
+    function pauseAudio() {
+        //@ts-ignore
+        document.getElementsByClassName('ytp-play-button')[0].click();
+    }
+
+    function pauseTabAudio() {
+        if (props.tab.id) {
+            chrome.scripting.executeScript({target: {tabId: props.tab.id}, func: pauseAudio }).then(() => {
+                // Fake the tab as not playing audio 
+                props.unmarkTabAudio(props.tab.id);
+                // until the browser registers the change and the list is refreshed
+                setTimeout(function() {
+                    props.updateTabList()
+                },3000);
+            }
+            );
+        }
+    }
+
     return (
         <div className="tabTableRow">
             <div><FontAwesomeIcon onClick={switchToTab} icon={faEye} className="tabActionIcon" title="Switch to Tab" /></div>
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
+            <div><FontAwesomeIcon onClick={pauseTabAudio} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>
             <div>{props.tab.title}</div>
             <div>{props.tab.url}</div>
         </div>

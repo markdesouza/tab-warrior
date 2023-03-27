@@ -8,15 +8,12 @@ interface TabTableFilterProps {
     onChange: ChangeEventHandler<HTMLInputElement>
 }
 
-
 function TabTableFilter(props: TabTableFilterProps) {
     var icon = props.filter === "" ? faMagnifyingGlass : faXmark;
     var cssClass = props.filter === "" ? "" : "cursor-pointer";
     function clearFilter() {
         props.onChange({target: {value: ""}} as React.ChangeEvent<HTMLInputElement>);
     }
-
-    
 
     return (
         <div className="tabTableFilter">
