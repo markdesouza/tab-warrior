@@ -1,30 +1,19 @@
 import { faEye, faSort, faSortAsc, faSortDesc, faTrashCan, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { ReactElement, useEffect, useState } from 'react';
-
+import { useState } from 'react';
 
 interface TabTableProps {
+    tabs: chrome.tabs.Tab[]
     textFilter: string
     audiableFilter: boolean
     onCount: Function
+    updateTabList: Function
+    unmarkTabAudio: Function
 }
 
 function TabTable(props: TabTableProps) {
-    const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
     const [sortIndex, setSortIndex] = useState<string>("");
     const [sortAsc, setSortAsc] = useState<boolean>(true);
-
-    useEffect(() => {
-        updateTabList();
-    }, []);
-
-    function updateTabList() {
-        let queryOptions = {};
-        chrome.tabs.query(queryOptions, tabs => {
-            setTabs(tabs);
-            props.onCount(tabs.length);
-        });
-    }
 
     const headers = ["", "", "", "Title", "URL"];
     const headersColumns = headers.map((header) => {
@@ -53,12 +42,7 @@ function TabTable(props: TabTableProps) {
         }
 
         return (<div onClick={clickHandler} className="tabTableHeader">{header} <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} /></div>)
-    }
-    );
-
-    const unmarkTabAudio = (tabId: number) => {
-        setTabs(tabs.map(tab => {if (tab.id === tabId) {tab.audible = false;} return tab;}));
-    }
+    });
 
     const search = props.textFilter.toLowerCase();
     const tabFilter = (tab: chrome.tabs.Tab) => {
@@ -66,7 +50,7 @@ function TabTable(props: TabTableProps) {
         var audiableFilter = (props.audiableFilter === false || props.audiableFilter === tab.audible);
         return textFilter && audiableFilter;
     }
-    const filteredTabs = tabs.filter(tab => tabFilter(tab));
+    const filteredTabs = props.tabs.filter(tab => tabFilter(tab));
 
     const compareTabs = (a: chrome.tabs.Tab, b: chrome.tabs.Tab) => {
         if (sortIndex === "") {
@@ -91,7 +75,7 @@ function TabTable(props: TabTableProps) {
     const sortedTabs = filteredTabs.sort(compareTabs);
 
     var dataRows = sortedTabs.map((tab) =>
-        <TabRow tab={tab} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} key={tab.id} />
+        <TabRow tab={tab} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
     );
     if (dataRows.length === 0) {
         dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);
@@ -118,7 +102,7 @@ function TabRow(props: TabRowProps) {
 
     function switchToTab() {
         if (props.tab.windowId) {
-            chrome.windows.update(props.tab.windowId, {focused: true}, (window) => {
+            chrome.windows.update(props.tab.windowId, { focused: true }, (window) => {
                 if (props.tab.id) {
                     chrome.tabs.update(props.tab.id, { active: true });
                 }
@@ -136,7 +120,7 @@ function TabRow(props: TabRowProps) {
 
     var audioCssClass = props.tab.audible ? "tabActionIcon" : "tabDisabledActionIcon";
     var audioTitle = props.tab.audible ? "Tab is playing audio" : "Tab is not playing audio";
-    
+
     function pauseAudio() {
         //@ts-ignore
         document.getElementsByClassName('ytp-play-button')[0].click();
@@ -144,13 +128,13 @@ function TabRow(props: TabRowProps) {
 
     function pauseTabAudio() {
         if (props.tab.id) {
-            chrome.scripting.executeScript({target: {tabId: props.tab.id}, func: pauseAudio }).then(() => {
+            chrome.scripting.executeScript({ target: { tabId: props.tab.id }, func: pauseAudio }).then(() => {
                 // Fake the tab as not playing audio 
                 props.unmarkTabAudio(props.tab.id);
                 // until the browser registers the change and the list is refreshed
-                setTimeout(function() {
+                setTimeout(function () {
                     props.updateTabList()
-                },3000);
+                }, 3000);
             }
             );
         }

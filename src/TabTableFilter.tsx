@@ -2,7 +2,6 @@ import { faMagnifyingGlass, faVolumeHigh, faXmark } from '@fortawesome/free-soli
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-
 interface TabTableFilterProps {
     textFilter: string
     setTextFilter: Function
