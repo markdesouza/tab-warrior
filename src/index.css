@@ -15,7 +15,6 @@ html, body {
 @tailwind components;
 @tailwind utilities;
 
-
 .tabTableFilter {
   @apply px-2;
   @apply border;
@@ -28,6 +27,7 @@ html, body {
 
 .tabTableFilter > * {
   @apply my-auto;
+  @apply mx-1;
 }
 
 .tabTableFilter > input {
@@ -37,6 +37,20 @@ html, body {
 
 .tabTableFilter > input:focus {
   outline: none;
+}
+
+.tabTableFilterDisabled {
+  @apply text-slate-300;
+}
+
+.tabTableFilterOff {
+  @apply tabTableFilterDisabled;
+  @apply cursor-pointer;
+}
+
+.tabTableFilterOn {
+  @apply text-slate-500;
+  @apply cursor-pointer;
 }
 
 .tabTable {

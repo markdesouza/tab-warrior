@@ -4,7 +4,8 @@ import React, { ReactElement, useEffect, useState } from 'react';
 
 
 interface TabTableProps {
-    filter: String
+    textFilter: string
+    audiableFilter: boolean
     onCount: Function
 }
 
@@ -55,6 +56,18 @@ function TabTable(props: TabTableProps) {
     }
     );
 
+    const unmarkTabAudio = (tabId: number) => {
+        setTabs(tabs.map(tab => {if (tab.id === tabId) {tab.audible = false;} return tab;}));
+    }
+
+    const search = props.textFilter.toLowerCase();
+    const tabFilter = (tab: chrome.tabs.Tab) => {
+        var textFilter = (search === "") || (tab.title?.toLowerCase().indexOf(search) !== -1) || (tab.url?.toLowerCase().indexOf(search) !== -1);
+        var audiableFilter = (props.audiableFilter === false || props.audiableFilter === tab.audible);
+        return textFilter && audiableFilter;
+    }
+    const filteredTabs = tabs.filter(tab => tabFilter(tab));
+
     const compareTabs = (a: chrome.tabs.Tab, b: chrome.tabs.Tab) => {
         if (sortIndex === "") {
             return 0;
@@ -75,18 +88,11 @@ function TabTable(props: TabTableProps) {
             return 0;
         }
     }
+    const sortedTabs = filteredTabs.sort(compareTabs);
 
-    const unmarkTabAudio = (tabId: number) => {
-        setTabs(tabs.map(tab => {if (tab.id === tabId) {tab.audible = false;} return tab;}));
-    }
-
-    const search = props.filter.toLowerCase();
-    var dataRows = tabs.filter(
-        tab => ((search === "") ||
-            (tab.title?.toLowerCase().indexOf(search) !== -1) ||
-            (tab.url?.toLowerCase().indexOf(search) !== -1))).sort(compareTabs).map((tab) =>
-                <TabRow tab={tab} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} key={tab.id} />
-            );
+    var dataRows = sortedTabs.map((tab) =>
+        <TabRow tab={tab} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} key={tab.id} />
+    );
     if (dataRows.length === 0) {
         dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);
     }

@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TabTable from './TabTable';
 import TabTableFilter from './TabTableFilter';
 import './App.css';
 
 function App() {
-  const [filter, setFilter] = useState<string>("");
+  const [textFilter, setTextFilter] = useState<string>("");
+  const [audiableFilter, setAudiableFilter] = useState<boolean>(false);
   const [tabCount, setTabCount] = useState<number>(0);
-
-  function onFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFilter(e.target.value);
-  }
 
   return (
     <div className="p-8 overflow-auto relative">
@@ -19,8 +16,8 @@ function App() {
         </h1>
         <span className="float-right mt-auto ml-4 text-sm">{"("+tabCount+" tabs)"}</span>
       </div>
-      <TabTableFilter filter={filter} onChange={onFilterChange} />
-      <TabTable filter={filter} onCount={setTabCount} />
+      <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} />
+      <TabTable textFilter={textFilter} audiableFilter={audiableFilter} onCount={setTabCount} />
     </div>
   );
 }
