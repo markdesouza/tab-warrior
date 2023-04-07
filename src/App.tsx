@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import TabTable from './TabTable';
 import TabTableFilter from './TabTableFilter';
-import { faRotate } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
+import AppHeader from './AppHeader';
+import { off } from 'process';
 
 function App() {
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
   const [textFilter, setTextFilter] = useState<string>("");
   const [audiableFilter, setAudiableFilter] = useState<boolean>(false);
-  const [tabCount, setTabCount] = useState<number>(0);
 
   useEffect(() => {
     updateTabList();
@@ -19,7 +18,6 @@ function App() {
     let queryOptions = {};
     chrome.tabs.query(queryOptions, tabs => {
       setTabs(tabs);
-      setTabCount(tabs.length);
     });
   }
 
@@ -27,19 +25,27 @@ function App() {
     setTabs(tabs.map(tab => { if (tab.id === tabId) { tab.audible = false; } return tab; }));
   }
 
+  const searchTokens = textFilter.toLowerCase().split(" ");
+  const tabFilter = (tab: chrome.tabs.Tab) => {
+      if ((audiableFilter === true) && (tab.audible === false)) {
+        return false;
+      }
+      for (const searchToken of searchTokens) {
+        if ((searchToken !== "") && 
+            (tab.title?.toLowerCase().indexOf(searchToken) === -1) && 
+            (tab.url?.toLowerCase().indexOf(searchToken) === -1)) {
+          return false;
+        }
+      }
+      return true;
+  }
+  const filteredTabs = tabs.filter(tab => tabFilter(tab));
+
   return (
     <div className="p-8 overflow-auto relative">
-      <div className="container flex w-fit mx-auto">
-        <h1 className="text-3xl font-bold underline float-left">
-          Tab Cleanup
-        </h1>
-        <span className="float-right mt-auto ml-4 text-sm">
-          {"(" + tabCount + " tabs)"}
-          <FontAwesomeIcon onClick={updateTabList} icon={faRotate} className="updateTabList" />
-        </span>
-      </div>
+      <AppHeader tabCount={tabs.length} displayCount={filteredTabs.length} onRefresh={updateTabList} />
       <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} />
-      <TabTable tabs={tabs} textFilter={textFilter} audiableFilter={audiableFilter} onCount={setTabCount} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} />
+      <TabTable tabs={filteredTabs} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} />
     </div>
   );
 }

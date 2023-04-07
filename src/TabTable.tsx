@@ -4,9 +4,6 @@ import { useState } from 'react';
 
 interface TabTableProps {
     tabs: chrome.tabs.Tab[]
-    textFilter: string
-    audiableFilter: boolean
-    onCount: Function
     updateTabList: Function
     unmarkTabAudio: Function
 }
@@ -44,14 +41,6 @@ function TabTable(props: TabTableProps) {
         return (<div onClick={clickHandler} className="tabTableHeader">{header} <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} /></div>)
     });
 
-    const search = props.textFilter.toLowerCase();
-    const tabFilter = (tab: chrome.tabs.Tab) => {
-        var textFilter = (search === "") || (tab.title?.toLowerCase().indexOf(search) !== -1) || (tab.url?.toLowerCase().indexOf(search) !== -1);
-        var audiableFilter = (props.audiableFilter === false || props.audiableFilter === tab.audible);
-        return textFilter && audiableFilter;
-    }
-    const filteredTabs = props.tabs.filter(tab => tabFilter(tab));
-
     const compareTabs = (a: chrome.tabs.Tab, b: chrome.tabs.Tab) => {
         if (sortIndex === "") {
             return 0;
@@ -72,7 +61,7 @@ function TabTable(props: TabTableProps) {
             return 0;
         }
     }
-    const sortedTabs = filteredTabs.sort(compareTabs);
+    const sortedTabs = props.tabs.sort(compareTabs);
 
     var dataRows = sortedTabs.map((tab) =>
         <TabRow tab={tab} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
