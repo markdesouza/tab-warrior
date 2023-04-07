@@ -122,6 +122,15 @@ html, body {
   width: 47%;
 }
 
+.tabTableRow > div:nth-child(4) > svg {
+  @apply text-slate-500;
+  @apply mr-1;
+}
+
 .tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5) {
   @apply font-bold;
+}
+
+.tabTableRow:hover > div:nth-child(4) > svg {
+  @apply text-black;
 }
