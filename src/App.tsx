@@ -17,7 +17,12 @@ function App() {
   function updateTabList() {
     let queryOptions = {};
     chrome.tabs.query(queryOptions, tabs => {
-      setTabs(tabs);
+      setTabs(tabs.map(tab => { 
+        if (tab.url?.startsWith("https://www.youtube.com/")) {
+          tab.title = tab.title?.replace(/^\([0-9]+\) /,"");
+        }
+        return tab;
+      }));
     });
   }
 
