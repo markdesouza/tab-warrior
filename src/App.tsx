@@ -3,7 +3,6 @@ import TabTable from './TabTable';
 import TabTableFilter from './TabTableFilter';
 import './App.css';
 import AppHeader from './AppHeader';
-import { off } from 'process';
 
 function App() {
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);

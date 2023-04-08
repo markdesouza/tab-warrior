@@ -15,8 +15,9 @@ function AppHeader(props: AppHeaderProps) {
 
     return (
         <div className="container flex w-fit mx-auto">
+            <img src="images/logo-48.png" className="float-left h-8 mt-1 mr-3" />
             <h1 className="text-3xl font-bold underline float-left">
-                Tab Cleanup
+                Tab Manager
             </h1>
             <span className="float-right mt-auto ml-4 text-sm">
                 {tabCountText}

@@ -9,6 +9,9 @@ body {
 
 html, body {
   width: 100%;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.3px;
 }
 
 @tailwind base;
@@ -83,6 +86,8 @@ html, body {
   @apply px-4;
   @apply py-1;
   @apply inline-block;
+  padding-top: 0.4rem;
+  @apply pb-1;
 }
 
 .tabTableHeader {
