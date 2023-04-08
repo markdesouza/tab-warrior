@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import TabTable from './TabTable';
-import TabTableFilter from './TabTableFilter';
+import TabTableFilter from './TabFilter';
 import './App.css';
 import AppHeader from './AppHeader';
 
@@ -8,6 +8,7 @@ function App() {
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
   const [textFilter, setTextFilter] = useState<string>("");
   const [audiableFilter, setAudiableFilter] = useState<boolean>(false);
+  const [incognitoFilter, setIncognitoFilter] = useState<boolean>(false);
 
   useEffect(() => {
     updateTabList();
@@ -34,6 +35,11 @@ function App() {
       if ((audiableFilter === true) && (tab.audible === false)) {
         return false;
       }
+
+      if ((incognitoFilter === true) && (tab.incognito === false)) {
+        return false;
+      }
+      
       for (const searchToken of searchTokens) {
         if ((searchToken !== "") && 
             (tab.title?.toLowerCase().indexOf(searchToken) === -1) && 
@@ -48,7 +54,7 @@ function App() {
   return (
     <div className="p-8 overflow-auto relative">
       <AppHeader tabCount={tabs.length} displayCount={filteredTabs.length} onRefresh={updateTabList} />
-      <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} />
+      <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} incognitoFilter={incognitoFilter} setIncognitoFilter={setIncognitoFilter}/>
       <TabTable tabs={filteredTabs} updateTabList={updateTabList} unmarkTabAudio={unmarkTabAudio} />
     </div>
   );
