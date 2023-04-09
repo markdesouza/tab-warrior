@@ -1,8 +1,11 @@
 import { faEye, faGlasses, faTrashCan, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import TabGroup from './TabGroup';
+import { Tab, Group } from './App';
 
 interface TabRowProps {
-    tab: chrome.tabs.Tab
+    tab: Tab
+    groups: Group[]
     updateTabList: Function
     unmarkTabAudio: Function
 }
@@ -58,6 +61,7 @@ function TabRow(props: TabRowProps) {
                 {props.tab.title}
             </div>
             <div>{props.tab.url}</div>
+            <TabGroup tab={props.tab} groups={props.groups} />
         </div>
     );
 }

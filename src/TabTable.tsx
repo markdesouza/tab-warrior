@@ -2,9 +2,11 @@ import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import TabRow from './TabRow';
+import { Tab, Group } from './App';
 
 interface TabTableProps {
-    tabs: chrome.tabs.Tab[]
+    tabs: Tab[]
+    groups: Group[]
     updateTabList: Function
     unmarkTabAudio: Function
 }
@@ -13,7 +15,7 @@ function TabTable(props: TabTableProps) {
     const [sortIndex, setSortIndex] = useState<string>("");
     const [sortAsc, setSortAsc] = useState<boolean>(true);
 
-    const headers = ["", "", "", "Title", "URL"];
+    const headers = ["", "", "", "Title", "URL", "Group"];
     const headersColumns = headers.map((header) => {
         if (header === "") {
             return (<div>&nbsp;</div>);
@@ -42,17 +44,20 @@ function TabTable(props: TabTableProps) {
         return (<div onClick={clickHandler} className="tabTableHeader">{header} <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} /></div>)
     });
 
-    const compareTabs = (a: chrome.tabs.Tab, b: chrome.tabs.Tab) => {
+    const compareTabs = (a: Tab, b: Tab) => {
         if (sortIndex === "") {
             return 0;
         }
         var aVal, bVal;
         if (sortIndex === "Title") {
-            aVal = a.title?.toLowerCase() ?? "";
-            bVal = b.title?.toLowerCase() ?? "";
-        } else {
-            aVal = a.url?.toLowerCase() ?? "";
-            bVal = b.url?.toLowerCase() ?? "";
+            aVal = a.compareTitle;
+            bVal = b.compareTitle;
+        } else if (sortIndex === "URL") {
+            aVal = a.compareUrl;
+            bVal = b.compareUrl;
+        } else { // (sortIndex === "Group") {
+            aVal = a.group.compareTitle;
+            bVal = b.group.compareTitle;
         }
         if (aVal > bVal) {
             return sortAsc ? 1 : -1;
@@ -65,7 +70,7 @@ function TabTable(props: TabTableProps) {
     const sortedTabs = props.tabs.sort(compareTabs);
 
     var dataRows = sortedTabs.map((tab) =>
-        <TabRow tab={tab} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
+        <TabRow tab={tab} groups={props.groups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
     );
     if (dataRows.length === 0) {
         dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);

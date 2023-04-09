@@ -124,7 +124,7 @@ html, body {
 }
 
 .tabTableRow > div:nth-child(4), .tabTableRow > div:nth-child(5) {
-  width: 47%;
+  width: 40%;
 }
 
 .tabTableRow > div:nth-child(4) > svg {
@@ -132,10 +132,25 @@ html, body {
   @apply mr-1;
 }
 
-.tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5) {
+.tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5), .tabTableRow:hover > div:nth-child(6) > select {
   @apply font-bold;
 }
 
 .tabTableRow:hover > div:nth-child(4) > svg {
   @apply text-black;
+}
+
+.tabTableRow > div:nth-child(6) {
+  width: 14%;
+}
+
+.tabTableRow:hover > div:nth-child(6) > select {
+  @apply bg-stone-100;
+}
+
+.tabTableRow > div:nth-child(6) > select {
+  @apply py-1;
+  @apply pl-0;
+  @apply pr-2;
+  @apply outline-none;
 }
