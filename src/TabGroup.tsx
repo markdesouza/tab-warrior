@@ -3,6 +3,7 @@ import { Tab, Group } from './App';
 interface TabGroupProps {
     tab: Tab
     groups: Group[]
+    updateTabList: Function
 }
 
 
@@ -10,9 +11,9 @@ function TabGroup(props: TabGroupProps) {
 
     function onChange(event: any) {
         if (event.target.value === "-1") {
-            chrome.tabs.ungroup(props.tab.id, () => {});
+            chrome.tabs.ungroup(props.tab.id, () => { props.updateTabList() });
         } else {
-            chrome.tabs.group({ tabIds: [props.tab.id], groupId: parseInt(event.target.value) }, () => {});
+            chrome.tabs.group({ tabIds: [props.tab.id], groupId: parseInt(event.target.value) }, () => { props.updateTabList() });
         }
     }
 

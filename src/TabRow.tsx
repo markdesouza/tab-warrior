@@ -61,7 +61,7 @@ function TabRow(props: TabRowProps) {
                 {props.tab.title}
             </div>
             <div>{props.tab.url}</div>
-            <TabGroup tab={props.tab} groups={props.groups} />
+            <TabGroup tab={props.tab} groups={props.groups} updateTabList={props.updateTabList} />
         </div>
     );
 }

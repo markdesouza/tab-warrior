@@ -105,11 +105,11 @@ function App() {
           if (negSearchToken === "") {
             continue;
           }
-          if ((tab.compareTitle.indexOf(negSearchToken) !== -1) || (tab.compareUrl.indexOf(negSearchToken) !== -1)) {
+          if ((tab.compareTitle.indexOf(negSearchToken) !== -1) || (tab.compareUrl.indexOf(negSearchToken) !== -1) || (tab.group.compareTitle.indexOf(negSearchToken) !== -1)) {
             return false;
           }
         } else {
-          if ((tab.compareTitle.indexOf(searchToken) === -1) && (tab.compareUrl.indexOf(searchToken) === -1)) {
+          if ((tab.compareTitle.indexOf(searchToken) === -1) && (tab.compareUrl.indexOf(searchToken) === -1) && (tab.group.compareTitle.indexOf(searchToken) === -1)) {
             return false;
           }
         }
