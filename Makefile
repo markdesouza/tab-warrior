@@ -2,6 +2,7 @@ prereq:
 	npm install --global web-ext
 	yarn install
 
+.PHONY: build
 build:
 	yarn build
 

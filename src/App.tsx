@@ -30,7 +30,7 @@ function App() {
     setTabs(tabs.map(tab => { if (tab.id === tabId) { tab.audible = false; } return tab; }));
   }
 
-  const searchTokens = textFilter.toLowerCase().split(" ");
+  var searchTokens = textFilter.toLowerCase().match(/"[^"]*"|\S+/g)?.map(match => match.replace('"', '')) ?? [];
   const tabFilter = (tab: chrome.tabs.Tab) => {
       if ((audiableFilter === true) && (tab.audible === false)) {
         return false;
@@ -39,12 +39,22 @@ function App() {
       if ((incognitoFilter === true) && (tab.incognito === false)) {
         return false;
       }
-      
+
       for (const searchToken of searchTokens) {
-        if ((searchToken !== "") && 
-            (tab.title?.toLowerCase().indexOf(searchToken) === -1) && 
-            (tab.url?.toLowerCase().indexOf(searchToken) === -1)) {
-          return false;
+        if (searchToken !== "") {
+          if (searchToken.startsWith("-")) {
+            const negSearchToken = searchToken.substring(1);
+            if (negSearchToken === "") {
+              continue;
+            }
+            if ((tab.title?.toLowerCase().indexOf(negSearchToken) !== -1) || (tab.url?.toLowerCase().indexOf(negSearchToken) !== -1)) {
+              return false;
+            }
+          } else {
+            if ((tab.title?.toLowerCase().indexOf(searchToken) === -1) && (tab.url?.toLowerCase().indexOf(searchToken) === -1)) {
+              return false;
+            }
+          }
         }
       }
       return true;
