@@ -51,12 +51,17 @@ function TabRow(props: TabRowProps) {
         }
     }
 
+    function hideBadFavIcon(e: any) {
+        e.target.style.opacity = "0";
+    }
+
     return (
         <div className="tabTableRow">
             <div><FontAwesomeIcon onClick={switchToTab} icon={faEye} className="tabActionIcon" title="Switch to Tab" /></div>
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
             <div><FontAwesomeIcon onClick={pauseTabAudio} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>
             <div>
+                <img src={props.tab.favIconUrl} className="tabFavicon" onError={hideBadFavIcon} />
                 {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} />}
                 {props.tab.title}
             </div>

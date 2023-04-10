@@ -132,6 +132,14 @@ html, body {
   @apply mr-1;
 }
 
+.tabTableRow > div:nth-child(4) > img {
+  @apply inline;
+  @apply w-4;
+  min-width: 1rem;
+  @apply mr-2;
+  @apply align-text-bottom;
+}
+
 .tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5), .tabTableRow:hover > div:nth-child(6) > select {
   @apply font-bold;
 }

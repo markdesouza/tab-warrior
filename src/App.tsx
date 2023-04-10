@@ -12,6 +12,7 @@ export interface Group {
 
 export interface Tab {
   id: number
+  favIconUrl: string
   title: string
   compareTitle: string
   url: string
@@ -54,6 +55,7 @@ function App() {
             id: chromeTab.id ?? -1,
             title: chromeTab.title ?? "",
             compareTitle: chromeTab.title?.toLowerCase() ?? "",
+            favIconUrl: chromeTab.favIconUrl ?? "",
             url: chromeTab.url ?? "",
             compareUrl: chromeTab.url?.toLowerCase() ?? "",
             audible: chromeTab.audible ?? false,
