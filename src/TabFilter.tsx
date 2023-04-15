@@ -12,7 +12,7 @@ interface TabTableFilterProps {
 }
 
 function TabTableFilter(props: TabTableFilterProps) {
-    var clearCssClass = props.textFilter !== "" ? "tabTableFilterOn" : "tabTableFilterDisabled";
+    var clearCssClass = (props.textFilter !== "" || props.audiableFilter || props.incognitoFilter) ? "tabTableFilterOn" : "tabTableFilterDisabled";
     var audiableCssClass = props.audiableFilter ? "tabTableFilterOn" : "tabTableFilterOff";
     var incognitoCssClass = props.incognitoFilter ? "tabTableFilterOn" : "tabTableFilterOff";
 
