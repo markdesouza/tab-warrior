@@ -127,11 +127,6 @@ html, body {
   width: 40%;
 }
 
-.tabTableRow > div:nth-child(4) > svg {
-  @apply text-slate-500;
-  @apply mr-1;
-}
-
 .tabTableRow > div:nth-child(4) > img {
   @apply inline;
   @apply w-4;
@@ -142,10 +137,6 @@ html, body {
 
 .tabTableRow:hover > div:nth-child(4), .tabTableRow:hover > div:nth-child(5), .tabTableRow:hover > div:nth-child(6) > select {
   @apply font-bold;
-}
-
-.tabTableRow:hover > div:nth-child(4) > svg {
-  @apply text-black;
 }
 
 .tabTableRow > div:nth-child(6) {
@@ -161,4 +152,8 @@ html, body {
   @apply pl-0;
   @apply pr-2;
   @apply outline-none;
+}
+
+.highlightTab {
+  @apply text-red-700;
 }

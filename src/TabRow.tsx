@@ -5,6 +5,7 @@ import { Tab, Group } from './App';
 
 interface TabRowProps {
     tab: Tab
+    highlight: boolean
     groups: Group[]
     updateTabList: Function
     unmarkTabAudio: Function
@@ -56,7 +57,7 @@ function TabRow(props: TabRowProps) {
     }
 
     return (
-        <div className="tabTableRow">
+        <div className={props.highlight ? "tabTableRow highlightTab" : "tabTableRow"} >
             <div><FontAwesomeIcon onClick={switchToTab} icon={faEye} className="tabActionIcon" title="Switch to Tab" /></div>
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
             <div><FontAwesomeIcon onClick={pauseTabAudio} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>

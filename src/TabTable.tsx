@@ -1,4 +1,4 @@
-import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortAsc, faSortDesc, faWindowRestore, faS } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import TabRow from './TabRow';
@@ -14,6 +14,7 @@ interface TabTableProps {
 function TabTable(props: TabTableProps) {
     const [sortIndex, setSortIndex] = useState<string>("");
     const [sortAsc, setSortAsc] = useState<boolean>(true);
+    const [highlightDuplicate, setHighlightDuplicate] = useState<boolean>(false);
 
     const headers = ["", "", "", "Title", "URL", "Group"];
     const headersColumns = headers.map((header) => {
@@ -21,27 +22,40 @@ function TabTable(props: TabTableProps) {
             return (<div>&nbsp;</div>);
         }
 
-        var sortIcon, sortTitle, sortCss, clickHandler;
+        var sortIcon, sortTitle, sortCss, sortHandler;
         if (sortIndex === header) {
             if (sortAsc === true) {
                 sortIcon = faSortAsc;
                 sortTitle = "Sort Descending";
                 sortCss = "";
-                clickHandler = () => { setSortIndex(header); setSortAsc(false); }
+                sortHandler = () => { setSortIndex(header); setSortAsc(false); }
             } else {
                 sortIcon = faSortDesc;
                 sortTitle = "Default Sorting";
                 sortCss = "";
-                clickHandler = () => { setSortIndex(""); setSortAsc(true); }
+                sortHandler = () => { setSortIndex(""); setSortAsc(true); }
             }
         } else {
             sortIcon = faSort;
             sortTitle = "Sort Ascending";
             sortCss = "inactiveSort";
-            clickHandler = () => { setSortIndex(header); setSortAsc(true); }
+            sortHandler = () => { setSortIndex(header); setSortAsc(true); setHighlightDuplicate(false);}
         }
-
-        return (<div onClick={clickHandler} className="tabTableHeader">{header} <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} /></div>)
+        var duplicateIcon = null;
+        if ((sortIndex === header) && (sortIndex !== "Group")) {
+            if (highlightDuplicate === false) {
+                duplicateIcon = <FontAwesomeIcon icon={faWindowRestore} title="Highlight Duplicates" className="tabDisabledActionIcon" onClick={(e) => { setHighlightDuplicate(true); e.stopPropagation(); }} />
+            } else {
+                duplicateIcon = <FontAwesomeIcon icon={faWindowRestore} title="Do Not Highlight Duplicates" className="tabActionIcon" onClick={(e) => { setHighlightDuplicate(false); e.stopPropagation(); }} />
+            }
+        }
+        return (
+            <div onClick={sortHandler} className="tabTableHeader">
+                {header} 
+                <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} />
+                {duplicateIcon}
+            </div>
+        )
     });
 
     const compareTabs = (a: Tab, b: Tab) => {
@@ -69,8 +83,19 @@ function TabTable(props: TabTableProps) {
     }
     const sortedTabs = props.tabs.sort(compareTabs);
 
-    var dataRows = sortedTabs.map((tab) =>
-        <TabRow tab={tab} groups={props.groups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
+    var dataRows = sortedTabs.map((tab, index, tabs) => {
+            var isDup = false;
+
+            if (highlightDuplicate && (index > 0)) {
+                if ((sortIndex === "Title") && (tab.title === tabs[index - 1].title)) {
+                    isDup = true;
+                } else if ((sortIndex === "URL") && (tab.url === tabs[index - 1].url)) {
+                    isDup = true;
+                }
+            }
+
+            return <TabRow tab={tab} highlight={isDup} groups={props.groups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
+        }
     );
     if (dataRows.length === 0) {
         dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);

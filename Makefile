@@ -1,8 +1,5 @@
-prereq:
-	npm install --global web-ext
-	yarn install
-
 .PHONY: build
+
 build:
 	yarn build
 
@@ -20,3 +17,7 @@ safari: build
 
 clean:
 	rm -rf build dist node_modules
+
+prereq:
+	npm install --global web-ext
+	yarn install
