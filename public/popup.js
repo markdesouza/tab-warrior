@@ -1,6 +1,6 @@
 const url = chrome.runtime.getURL("index.html");
 chrome.tabs.query({ url: url }, (tabs) => {
-  // Find if an tab of tab manager is already open
+  // Find if an tab of tab warrior is already open
   for (const tab of tabs) {
     if (tab.windowId) {
       chrome.windows.getCurrent((currentWindow) => {
