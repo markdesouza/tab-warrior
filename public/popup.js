@@ -14,9 +14,9 @@ chrome.tabs.query({ url: url }, (tabs) => {
       });
       return;
     }
-    // If not, open a new tab
-    chrome.tabs.create({ url: url }, () => {
-      window.close();
-    });
   }
+  // If not, open a new tab
+  chrome.tabs.create({ url: url }, () => {
+    window.close();
+  });
 });
