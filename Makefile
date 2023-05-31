@@ -1,6 +1,6 @@
 .PHONY: build
 
-build:
+build: prereq
 	yarn build
 
 dist:
@@ -10,10 +10,10 @@ chrome: build dist
 	zip -r dist/chrome.zip build/
 
 firefox: build dist
-	web-ext build -s build -a dist --overwrite-dest
+	web-ext build -s build -a dist/firefox --overwrite-dest
 
-safari: build 
-	xcrun safari-web-extension-converter build --project-location safari
+safari: build dist
+	xcrun safari-web-extension-converter build --project-location dist/safari
 
 clean:
 	rm -rf build dist node_modules

@@ -7,6 +7,7 @@ import { Tab, Group } from './App';
 interface TabTableProps {
     tabs: Tab[]
     groups: Group[]
+    showGroups: boolean
     updateTabList: Function
     unmarkTabAudio: Function
 }
@@ -16,7 +17,10 @@ function TabTable(props: TabTableProps) {
     const [sortAsc, setSortAsc] = useState<boolean>(true);
     const [highlightDuplicate, setHighlightDuplicate] = useState<boolean>(false);
 
-    const headers = ["", "", "", "Title", "URL", "Group"];
+    let headers = ["", "", "", "Title", "URL"];
+    if (props.showGroups) {
+        headers.push("Group");
+    }
     const headersColumns = headers.map((header) => {
         if (header === "") {
             return (<div>&nbsp;</div>);
@@ -39,7 +43,7 @@ function TabTable(props: TabTableProps) {
             sortIcon = faSort;
             sortTitle = "Sort Ascending";
             sortCss = "inactiveSort";
-            sortHandler = () => { setSortIndex(header); setSortAsc(true); setHighlightDuplicate(false);}
+            sortHandler = () => { setSortIndex(header); setSortAsc(true); setHighlightDuplicate(false); }
         }
         var duplicateIcon = null;
         if ((sortIndex === header) && (sortIndex !== "Group")) {
@@ -51,7 +55,7 @@ function TabTable(props: TabTableProps) {
         }
         return (
             <div onClick={sortHandler} className="tabTableHeader">
-                {header} 
+                {header}
                 <FontAwesomeIcon icon={sortIcon} title={sortTitle} className={sortCss} />
                 {duplicateIcon}
             </div>
@@ -84,18 +88,18 @@ function TabTable(props: TabTableProps) {
     const sortedTabs = props.tabs.sort(compareTabs);
 
     var dataRows = sortedTabs.map((tab, index, tabs) => {
-            var isDup = false;
+        var isDup = false;
 
-            if (highlightDuplicate && (index > 0)) {
-                if ((sortIndex === "Title") && (tab.title === tabs[index - 1].title)) {
-                    isDup = true;
-                } else if ((sortIndex === "URL") && (tab.url === tabs[index - 1].url)) {
-                    isDup = true;
-                }
+        if (highlightDuplicate && (index > 0)) {
+            if ((sortIndex === "Title") && (tab.title === tabs[index - 1].title)) {
+                isDup = true;
+            } else if ((sortIndex === "URL") && (tab.url === tabs[index - 1].url)) {
+                isDup = true;
             }
-
-            return <TabRow tab={tab} highlight={isDup} groups={props.groups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
         }
+
+        return <TabRow tab={tab} highlight={isDup} groups={props.groups} showGroups={props.showGroups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
+    }
     );
     if (dataRows.length === 0) {
         dataRows.push(<div className="w-full text-center my-3 text-sm italic ">No tabs found matching your search filter...</div>);

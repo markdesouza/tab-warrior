@@ -7,6 +7,7 @@ interface TabRowProps {
     tab: Tab
     highlight: boolean
     groups: Group[]
+    showGroups: boolean
     updateTabList: Function
     unmarkTabAudio: Function
 }
@@ -62,12 +63,12 @@ function TabRow(props: TabRowProps) {
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
             <div><FontAwesomeIcon onClick={pauseTabAudio} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>
             <div>
-                <img src={props.tab.favIconUrl} className="tabFavicon" onError={hideBadFavIcon} />
-                {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} />}
-                {props.tab.title}
+                <img src={props.tab.favIconUrl} onClick={switchToTab} className="tabFavicon cursor-pointer" onError={hideBadFavIcon} />
+                {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} onClick={switchToTab} className="cursor-pointer" />}
+                <span onClick={switchToTab} className="cursor-pointer">{props.tab.title}</span>
             </div>
-            <div>{props.tab.url}</div>
-            <TabGroup tab={props.tab} groups={props.groups} updateTabList={props.updateTabList} />
+            <div><span onClick={switchToTab} className="cursor-pointer">{props.tab.url}</span></div>
+            {props.showGroups && <TabGroup tab={props.tab} groups={props.groups} updateTabList={props.updateTabList} />}
         </div>
     );
 }

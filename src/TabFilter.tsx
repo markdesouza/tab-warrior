@@ -40,7 +40,7 @@ function TabTableFilter(props: TabTableFilterProps) {
     return (
         <div className="tabTableFilter">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
-            <input type="text"  placeholder="Filter" value={props.textFilter} onChange={onTextFiltertChange} />
+            <input type="text" placeholder="Filter" value={props.textFilter} onChange={onTextFiltertChange} />
             <FontAwesomeIcon icon={faVolumeHigh} onClick={toggleAudiableFilter} className={audiableCssClass} title={audiableTitle} />
             <FontAwesomeIcon icon={faGlasses} onClick={toggleIncognitoFilter} className={incognitoCssClass} title={incognitoTitle} />
             <FontAwesomeIcon icon={faXmark} onClick={clearFilter} className={clearCssClass} />

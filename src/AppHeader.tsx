@@ -10,7 +10,7 @@ interface AppHeaderProps {
 function AppHeader(props: AppHeaderProps) {
     var tabCountText = "(" + props.tabCount + " tabs)";
     if (props.tabCount !== props.displayCount) {
-        tabCountText = "(" + props.displayCount + " of "+ props.tabCount + " tabs)"
+        tabCountText = "(" + props.displayCount + " of " + props.tabCount + " tabs)"
     }
 
     return (
