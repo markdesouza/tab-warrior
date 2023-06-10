@@ -106,7 +106,7 @@ function TabTable(props: TabTableProps) {
     }
 
     return (
-        <div className="tabTable">
+        <div className={props.showGroups ? "tabTable" : "tabTable noTabGroups"}>
             <div className="tabTableRow">
                 {headersColumns}
             </div>
