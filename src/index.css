@@ -31,6 +31,7 @@ body {
     @apply text-base;
     @apply -mt-7;
     @apply w-1/6;
+    @apply min-w-fit;
     @apply flex;
 }
 
