@@ -2,7 +2,7 @@ import { faEye, faGlasses, faTrashCan, faVolumeHigh } from '@fortawesome/free-so
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TabGroup from './TabGroup';
 import { Tab, Group } from './App';
-import {tabPauseVideo, tabCloseTab, tabSwitchToTab} from './helper';
+import { tabPauseVideo, tabCloseTab, tabSwitchToTab } from './helper';
 
 interface TabRowProps {
     tab: Tab
@@ -15,16 +15,19 @@ interface TabRowProps {
 
 function TabRow(props: TabRowProps) {
 
-    function closeTab() {
-        tabCloseTab(props.tab, props.updateTabList); 
+    async function switchToTab() {
+        const promise = tabSwitchToTab(props.tab);
+        promise && await promise;
     }
 
-    function pauseVideo() {
-        tabPauseVideo(props.tab, props.unmarkTabAudio, props.updateTabList);       
+    async function closeTab() {
+        const promise = tabCloseTab(props.tab, props.updateTabList);
+        promise && await promise;
     }
 
-    function switchToTab() {
-        tabSwitchToTab(props.tab);
+    async function pauseVideo() {
+        const promise = tabPauseVideo(props.tab, props.unmarkTabAudio, props.updateTabList);
+        promise && await promise;
     }
 
     function hideBadFavIcon(e: any) {
@@ -40,7 +43,7 @@ function TabRow(props: TabRowProps) {
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
             <div><FontAwesomeIcon onClick={pauseVideo} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>
             <div>
-                <img src={props.tab.favIconUrl} onClick={switchToTab} className="tabFavicon cursor-pointer" onError={hideBadFavIcon} />
+                <img src={props.tab.favIconUrl} alt="Switch to Tab" onClick={switchToTab} className="tabFavicon cursor-pointer" onError={hideBadFavIcon} />
                 {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} onClick={switchToTab} className="cursor-pointer" />}
                 <span onClick={switchToTab} className="cursor-pointer">{props.tab.title}</span>
             </div>

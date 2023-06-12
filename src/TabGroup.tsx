@@ -9,11 +9,11 @@ interface TabGroupProps {
 
 function TabGroup(props: TabGroupProps) {
 
-    function onChange(event: any) {
+    async function onChange(event: any) {
         if (event.target.value === "-1") {
-            chrome.tabs.ungroup(props.tab.id, () => { props.updateTabList() });
+            await chrome.tabs.ungroup(props.tab.id).then(() => { props.updateTabList() });
         } else {
-            chrome.tabs.group({ tabIds: [props.tab.id], groupId: parseInt(event.target.value) }, () => { props.updateTabList() });
+            await chrome.tabs.group({ tabIds: [props.tab.id], groupId: parseInt(event.target.value) }).then(() => { props.updateTabList() });
         }
     }
 

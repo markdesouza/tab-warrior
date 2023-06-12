@@ -15,7 +15,7 @@ function AppHeader(props: AppHeaderProps) {
 
     return (
         <div className="container flex w-fit mx-auto">
-            <img src="images/logo-48.png" className="float-left h-8 mt-1 mr-3" />
+            <img src="images/logo-48.png" alt="logo" className="float-left h-8 mt-1 mr-3" />
             <h1 className="text-3xl font-bold underline float-left">
                 Tab Warrior
             </h1>

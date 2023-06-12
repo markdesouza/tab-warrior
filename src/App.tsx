@@ -3,7 +3,7 @@ import TabTable from './TabTable';
 import TabTableFilter from './TabFilter';
 import './App.css';
 import AppHeader from './AppHeader';
-import { tabPauseVideo, tabCloseTab } from './helper';
+import { tabPauseVideo, tabCloseTab, PAUSE_WAIT_TIME } from './helper';
 
 export interface Group {
     id: number
@@ -33,13 +33,11 @@ function App() {
 
     const showGroups = chrome.tabGroups !== undefined
 
-    useEffect(() => {
-        updateTabListWithGroups();
-    }, [])
+    useEffect(updateTabListWithGroups, [])
 
     function updateTabListWithGroups() {
         if (showGroups) {
-            chrome.tabGroups.query({}, chromeGroups => {
+            chrome.tabGroups.query({}).then(chromeGroups => {
                 updateTabList(chromeGroups);
             });
         } else {
@@ -48,7 +46,7 @@ function App() {
     }
 
     function updateTabList(chromeGroups: chrome.tabGroups.TabGroup[]) {
-        chrome.tabs.query({}, chromeTabs => {
+        chrome.tabs.query({}).then(chromeTabs => {
             const noGroup: Group = { id: -1, title: "None", compareTitle: "none" }
 
             var retrievedGroups = chromeGroups.map(chromeGroup => {
@@ -136,7 +134,7 @@ function App() {
         const link = document.createElement("a");
         var content = "";
         for (const tab of filteredTabs) {
-            content += tab.url + "\t"+ tab.title + "\n";
+            content += tab.url + "\t" + tab.title + "\n";
         }
         const file = new Blob([content], { type: 'text/tab-separated-values' });
         link.href = URL.createObjectURL(file);
@@ -146,21 +144,23 @@ function App() {
     }
 
     function closeAllTabs() {
+        const promises: Promise<void>[] = [];
         for (const tab of filteredTabs) {
-            if (tab.id) {
-                tabCloseTab(tab, null);
-            }
+            const promise = tabCloseTab(tab, null);
+            promise && promises.push(promise);
         }
-        updateTabListWithGroups();
+        Promise.all(promises).then(updateTabListWithGroups);
     }
 
     function pauseVideoAllTabs() {
+        const promises: Promise<void>[] = [];
         for (const tab of filteredTabs) {
             if (tab.audible) {
-                tabPauseVideo(tab, unmarkTabAudio, null);
+                const promise = tabPauseVideo(tab, unmarkTabAudio, null);
+                promise && promises.push(promise);
             }
         }
-        updateTabListWithGroups();
+        Promise.all(promises).then(() => setTimeout(updateTabListWithGroups, PAUSE_WAIT_TIME));
     }
 
     return (

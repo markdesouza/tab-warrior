@@ -8,7 +8,7 @@
         }
     },
     "manifest_version": 3,
-    "description": "Tab Warrior is a browser extension that allows you to manage your tabs in a simple and easy way. List them, filter them, close them, find out which one is making that damn noise and you can even pause videos playing in them. Filters can be based on matches on title or url, if incognito/audiable or not and text matches can be quoted or negated. Its simply the best way to take control of your browsers tabs.", 
+    "description": "Tab Warrior is a browser extension that allows you to manage your tabs in a simple and easy way. List them, filter them, close them, find out which one is making that damn noise and you can even pause videos playing in them. Filters can be based on matches on title or url, if incognito/audiable or not and text matches can be quoted or negated. Its simply the best way to take control of your browsers tabs.",
     "icons": {
         "16": "images/logo-16.png",
         "32": "images/logo-32.png",

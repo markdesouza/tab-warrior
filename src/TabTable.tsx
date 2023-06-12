@@ -27,11 +27,11 @@ function TabTable(props: TabTableProps) {
     const headersColumns = headers.map((header, i) => {
         if (header === "") {
             if (i === 0) {
-                return (<FontAwesomeIcon onClick={() => { props.onDownloadTabs() }} icon={faSave} className="tabActionIcon" title="Download TSV" />)
+                return (<div><FontAwesomeIcon onClick={() => { props.onDownloadTabs() }} icon={faSave} className="tabActionIcon" title="Download TSV" /></div>)
             } else if (i === 1) {
-                return (<FontAwesomeIcon onClick={() => { props.onCloseAllTabs() }} icon={faTrashCan} className="tabActionIcon" title="Close All Tabs" />)
+                return (<div><FontAwesomeIcon onClick={() => { props.onCloseAllTabs() }} icon={faTrashCan} className="tabActionIcon" title="Close All Tabs" /></div>)
             } else if (i === 2) {
-                return (<FontAwesomeIcon onClick={() => { props.onPauseAllTabs() }} icon={faVolumeHigh} className="tabActionIcon" title="Pause Video On All Tabs" />)
+                return (<div><FontAwesomeIcon onClick={() => { props.onPauseAllTabs() }} icon={faVolumeHigh} className="tabActionIcon" title="Pause Video On All Tabs" /></div>)
             } else {
                 return (<div>&nbsp;</div>);
             }
@@ -64,7 +64,7 @@ function TabTable(props: TabTableProps) {
                 duplicateIcon = <FontAwesomeIcon icon={faWindowRestore} title="Do Not Highlight Duplicates" className="tabActionIcon" onClick={(e) => { setHighlightDuplicate(false); e.stopPropagation(); }} />
             }
         }
-        
+
         return (
             <div onClick={sortHandler} className="tabTableHeader">
                 {header}
