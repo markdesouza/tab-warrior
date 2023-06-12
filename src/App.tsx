@@ -3,6 +3,7 @@ import TabTable from './TabTable';
 import TabTableFilter from './TabFilter';
 import './App.css';
 import AppHeader from './AppHeader';
+import { tabPauseVideo, tabCloseTab } from './helper';
 
 export interface Group {
     id: number
@@ -131,11 +132,42 @@ function App() {
     }
     const filteredTabs = tabs.filter(tab => tabFilter(tab));
 
+    function downloadTabs() {
+        const link = document.createElement("a");
+        var content = "";
+        for (const tab of filteredTabs) {
+            content += tab.url + "\t"+ tab.title + "\n";
+        }
+        const file = new Blob([content], { type: 'text/tab-separated-values' });
+        link.href = URL.createObjectURL(file);
+        link.download = "tabs.tsv";
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    function closeAllTabs() {
+        for (const tab of filteredTabs) {
+            if (tab.id) {
+                tabCloseTab(tab, null);
+            }
+        }
+        updateTabListWithGroups();
+    }
+
+    function pauseVideoAllTabs() {
+        for (const tab of filteredTabs) {
+            if (tab.audible) {
+                tabPauseVideo(tab, unmarkTabAudio, null);
+            }
+        }
+        updateTabListWithGroups();
+    }
+
     return (
         <div className="p-8 overflow-auto relative">
             <AppHeader tabCount={tabs.length} displayCount={filteredTabs.length} onRefresh={updateTabListWithGroups} />
             <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} incognitoFilter={incognitoFilter} setIncognitoFilter={setIncognitoFilter} />
-            <TabTable tabs={filteredTabs} groups={groups} updateTabList={updateTabListWithGroups} unmarkTabAudio={unmarkTabAudio} showGroups={showGroups} />
+            <TabTable tabs={filteredTabs} groups={groups} updateTabList={updateTabListWithGroups} onDownloadTabs={downloadTabs} onCloseAllTabs={closeAllTabs} onPauseAllTabs={pauseVideoAllTabs} unmarkTabAudio={unmarkTabAudio} showGroups={showGroups} />
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { faSort, faSortAsc, faSortDesc, faWindowRestore, faS } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortAsc, faSortDesc, faWindowRestore, faSave, faTrashCan, faVolumeHigh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import TabRow from './TabRow';
@@ -9,6 +9,9 @@ interface TabTableProps {
     groups: Group[]
     showGroups: boolean
     updateTabList: Function
+    onDownloadTabs: Function
+    onCloseAllTabs: Function
+    onPauseAllTabs: Function
     unmarkTabAudio: Function
 }
 
@@ -21,9 +24,17 @@ function TabTable(props: TabTableProps) {
     if (props.showGroups) {
         headers.push("Group");
     }
-    const headersColumns = headers.map((header) => {
+    const headersColumns = headers.map((header, i) => {
         if (header === "") {
-            return (<div>&nbsp;</div>);
+            if (i === 0) {
+                return (<FontAwesomeIcon onClick={() => { props.onDownloadTabs() }} icon={faSave} className="tabActionIcon" title="Download TSV" />)
+            } else if (i === 1) {
+                return (<FontAwesomeIcon onClick={() => { props.onCloseAllTabs() }} icon={faTrashCan} className="tabActionIcon" title="Close All Tabs" />)
+            } else if (i === 2) {
+                return (<FontAwesomeIcon onClick={() => { props.onPauseAllTabs() }} icon={faVolumeHigh} className="tabActionIcon" title="Pause Video On All Tabs" />)
+            } else {
+                return (<div>&nbsp;</div>);
+            }
         }
 
         var sortIcon, sortTitle, sortCss, sortHandler;
@@ -53,6 +64,7 @@ function TabTable(props: TabTableProps) {
                 duplicateIcon = <FontAwesomeIcon icon={faWindowRestore} title="Do Not Highlight Duplicates" className="tabActionIcon" onClick={(e) => { setHighlightDuplicate(false); e.stopPropagation(); }} />
             }
         }
+        
         return (
             <div onClick={sortHandler} className="tabTableHeader">
                 {header}
