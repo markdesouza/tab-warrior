@@ -1,7 +1,10 @@
 .PHONY: build
 
-build: prereq
+build: 
 	yarn build
+
+lint: 
+	yarn eslint src/.
 
 dist:
 	test -d dist || mkdir dist
