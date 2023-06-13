@@ -30,12 +30,15 @@ function App() {
     const [textFilter, setTextFilter] = useState<string>("");
     const [audiableFilter, setAudiableFilter] = useState<boolean>(false);
     const [incognitoFilter, setIncognitoFilter] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    // Only support tab groups in Chrome
     const showGroups = chrome.tabGroups !== undefined
 
     useEffect(updateTabListWithGroups, [])
 
     function updateTabListWithGroups() {
+        setIsLoading(true);
         if (showGroups) {
             chrome.tabGroups.query({}).then(chromeGroups => {
                 updateTabList(chromeGroups);
@@ -92,6 +95,7 @@ function App() {
 
                 return tab;
             }));
+            setIsLoading(false);
         });
     }
 
@@ -165,7 +169,7 @@ function App() {
 
     return (
         <div className="p-8 overflow-auto relative">
-            <AppHeader tabCount={tabs.length} displayCount={filteredTabs.length} onRefresh={updateTabListWithGroups} />
+            <AppHeader tabCount={tabs.length} displayCount={filteredTabs.length} onRefresh={updateTabListWithGroups} isLoading={isLoading} />
             <TabTableFilter textFilter={textFilter} setTextFilter={setTextFilter} audiableFilter={audiableFilter} setAudiableFilter={setAudiableFilter} incognitoFilter={incognitoFilter} setIncognitoFilter={setIncognitoFilter} />
             <TabTable tabs={filteredTabs} groups={groups} updateTabList={updateTabListWithGroups} onDownloadTabs={downloadTabs} onCloseAllTabs={closeAllTabs} onPauseAllTabs={pauseVideoAllTabs} unmarkTabAudio={unmarkTabAudio} showGroups={showGroups} />
         </div>

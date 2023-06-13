@@ -99,7 +99,16 @@ function TabTable(props: TabTableProps) {
     }
     const sortedTabs = props.tabs.sort(compareTabs);
 
-    var dataRows = sortedTabs.map((tab, index, tabs) => {
+    // Detect if the browser supports favIconUrl in the tabs API
+    let showFavIcon = false;
+    for (let i = 0; i < sortedTabs.length; i++) {
+        if (sortedTabs[i].favIconUrl !== "") {
+            showFavIcon = true;
+            break;
+        }
+    }
+
+    let dataRows = sortedTabs.map((tab, index, tabs) => {
         var isDup = false;
 
         if (highlightDuplicate && (index > 0)) {
@@ -110,7 +119,7 @@ function TabTable(props: TabTableProps) {
             }
         }
 
-        return <TabRow tab={tab} highlight={isDup} groups={props.groups} showGroups={props.showGroups} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
+        return <TabRow tab={tab} highlight={isDup} groups={props.groups} showGroups={props.showGroups} showFavIcon={showFavIcon} updateTabList={props.updateTabList} unmarkTabAudio={props.unmarkTabAudio} key={tab.id} />
     }
     );
     if (dataRows.length === 0) {

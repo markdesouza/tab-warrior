@@ -5,6 +5,7 @@ interface AppHeaderProps {
     tabCount: Number
     displayCount: Number
     onRefresh: Function
+    isLoading: boolean
 }
 
 function AppHeader(props: AppHeaderProps) {
@@ -13,6 +14,8 @@ function AppHeader(props: AppHeaderProps) {
         tabCountText = "(" + props.displayCount + " of " + props.tabCount + " tabs)"
     }
 
+    const refreshCssClass = props.isLoading ? "updateTabList animate-spin" : "updateTabList";
+    
     return (
         <div className="container flex w-fit mx-auto">
             <img src="images/logo-48.png" alt="logo" className="float-left h-8 mt-1 mr-3" />
@@ -21,7 +24,7 @@ function AppHeader(props: AppHeaderProps) {
             </h1>
             <span className="float-right mt-auto ml-4 text-sm">
                 {tabCountText}
-                <FontAwesomeIcon onClick={() => { props.onRefresh() }} icon={faRotate} className="updateTabList" />
+                <FontAwesomeIcon onClick={() => { props.onRefresh() }} icon={faRotate} className={refreshCssClass} />
             </span>
         </div>
     );
