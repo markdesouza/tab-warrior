@@ -35,6 +35,10 @@ function TabRow(props: TabRowProps) {
         e.target.style.opacity = "0";
     }
 
+    function copyUrlToClipboard() {
+        navigator.clipboard.writeText(props.tab.url);
+    }
+
     var audioCssClass = props.tab.audible ? "tabActionIcon" : "tabDisabledActionIcon";
     var audioTitle = props.tab.audible ? "Tab is playing audio" : "Tab is not playing audio";
 
@@ -44,11 +48,11 @@ function TabRow(props: TabRowProps) {
             <div><FontAwesomeIcon onClick={closeTab} icon={faTrashCan} className="tabActionIcon" title="Close Tab" /></div>
             <div><FontAwesomeIcon onClick={pauseVideo} icon={faVolumeHigh} className={audioCssClass} title={audioTitle} /></div>
             <div>
-                {props.showFavIcon && <img src={props.tab.favIconUrl} alt="Switch to Tab" onClick={switchToTab} className="icon cursor-pointer" onError={hideBadFavIcon} />}
-                {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} onClick={switchToTab} className="cursor-pointer" />}
-                <span onClick={switchToTab} className="cursor-pointer">{props.tab.title}</span>
+                {props.showFavIcon && <img src={props.tab.favIconUrl} alt="Switch to Tab" onClick={switchToTab} title="Switch to Tab" className="icon cursor-pointer" onError={hideBadFavIcon} />}
+                {props.tab.incognito && <FontAwesomeIcon icon={faGlasses} onClick={switchToTab} title="Switch to Tab" className="cursor-pointer" />}
+                <span onClick={switchToTab} title="Switch to Tab" className="cursor-pointer">{props.tab.title}</span>
             </div>
-            <div><span onClick={switchToTab} className="cursor-pointer">{props.tab.url}</span></div>
+            <div><span onClick={copyUrlToClipboard} title="Copy Link" className="cursor-pointer">{props.tab.url}</span></div>
             {props.showGroups && <TabGroup tab={props.tab} groups={props.groups} updateTabList={props.updateTabList} />}
         </div>
     );

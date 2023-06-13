@@ -102,6 +102,15 @@ body {
     @apply ml-1;
 }
 
+.tabTableRow>.tabTableHeader:nth-child(1)>svg,
+.tabTableRow>.tabTableHeader:nth-child(2)>svg,
+.tabTableRow>.tabTableHeader:nth-child(3)>svg {
+    @apply ml-0;
+    @apply mt-1;
+    opacity: 0.8;
+}
+
+
 .tabTableHeader>svg:hover {
     @apply text-black;
 }

@@ -15,9 +15,9 @@ function AppHeader(props: AppHeaderProps) {
     }
 
     const refreshCssClass = props.isLoading ? "updateTabList animate-spin" : "updateTabList";
-    
+
     return (
-        <div className="container flex w-fit mx-auto">
+        <div className="container flex w-fit mx-4 md:mx-auto">
             <img src="images/logo-48.png" alt="logo" className="float-left h-8 mt-1 mr-3" />
             <h1 className="text-3xl font-bold underline float-left">
                 Tab Warrior

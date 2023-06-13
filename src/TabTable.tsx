@@ -27,11 +27,11 @@ function TabTable(props: TabTableProps) {
     const headersColumns = headers.map((header, i) => {
         if (header === "") {
             if (i === 0) {
-                return (<div><FontAwesomeIcon onClick={() => { props.onDownloadTabs() }} icon={faSave} className="tabActionIcon" title="Download TSV" /></div>)
+                return (<div className="tabTableHeader"><FontAwesomeIcon onClick={() => { props.onDownloadTabs() }} icon={faSave} className="tabActionIcon" title="Download TSV" /></div>)
             } else if (i === 1) {
-                return (<div><FontAwesomeIcon onClick={() => { props.onCloseAllTabs() }} icon={faTrashCan} className="tabActionIcon" title="Close All Tabs" /></div>)
+                return (<div className="tabTableHeader"><FontAwesomeIcon onClick={() => { props.onCloseAllTabs() }} icon={faTrashCan} className="tabActionIcon" title="Close All Tabs" /></div>)
             } else if (i === 2) {
-                return (<div><FontAwesomeIcon onClick={() => { props.onPauseAllTabs() }} icon={faVolumeHigh} className="tabActionIcon" title="Pause Video On All Tabs" /></div>)
+                return (<div className="tabTableHeader"><FontAwesomeIcon onClick={() => { props.onPauseAllTabs() }} icon={faVolumeHigh} className="tabActionIcon" title="Pause Video On All Tabs" /></div>)
             } else {
                 return (<div>&nbsp;</div>);
             }
